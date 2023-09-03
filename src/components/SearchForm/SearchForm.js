@@ -10,7 +10,6 @@ function SearchForm({ onFilterChange, isFilterOn }) {
   return (
     <section
       className="search-form"
-      aria-label="Секция с поиском и фильтрацией"
     >
       <form
         className="search-form__form"

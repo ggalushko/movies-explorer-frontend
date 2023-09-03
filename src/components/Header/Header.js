@@ -59,7 +59,6 @@ function Header({ onHamburgerClick }) {
               <button
                 className="header__btn-hamburger hover-button"
                 type="button"
-                aria-label="Меню навигации"
                 onClick={onHamburgerClick}
               ></button>
             </div>
@@ -75,7 +74,6 @@ function Header({ onHamburgerClick }) {
               <button
                 className="header__btn-hamburger hover-button"
                 type="button"
-                aria-label="Меню навигации"
                 onClick={onHamburgerClick}
               ></button>
             </div>

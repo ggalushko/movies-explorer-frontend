@@ -14,7 +14,6 @@ function HamburgerMenu({ isSideMenuOpen, onClose }) {
         <button
           className="hamburger-menu__btn-close hover-button"
           type="button"
-          aria-label="Закрыть меню"
           onClick={onClose}
         ></button>
         <Navigation isSideMenu={true} onClose={onClose} />

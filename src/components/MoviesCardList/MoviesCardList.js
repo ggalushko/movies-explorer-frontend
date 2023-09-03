@@ -5,7 +5,6 @@ function MoviesCardList({ cards, isLiked, onCardLike }) {
   return (
     <section
       className="movies-card-list"
-      aria-label="Секция с карточками фильмов"
     >
       {cards.length === 0 ? (
         <p className="movies-card-list__not-found">

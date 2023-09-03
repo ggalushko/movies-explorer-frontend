@@ -1,4 +1,3 @@
-// IMPORT PACKAGES
 import { useEffect, useRef, useState } from "react";
 import { Route, Routes } from "react-router-dom";
 import "./App.css";
