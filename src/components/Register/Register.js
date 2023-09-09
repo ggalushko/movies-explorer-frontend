@@ -1,28 +1,35 @@
-import useValidation from "../../hooks/useValidation";
+import { Navigate } from "react-router-dom";
+import useFormWithValidation from "../../hooks/useFormWithValidation";
+import { USER_NAME_REG_EXP } from "../../utils/constants";
 import "./Register.css";
 import AuthScreen from "../AuthScreen/AuthScreen";
 
-function Register() {
-  const { values, errors, isFormValid, onChange } = useValidation();
+function Register({ onRegistr, onLoading, loggedIn }) {
+  // HOOKS
+  const { values, errors, isFormValid, onChange } = useFormWithValidation();
 
+  // HANDLER SUBMIT
   function handleSubmit(e) {
     e.preventDefault();
+    onRegistr(values);
   }
 
-  return (
-    <main className="register">
+  return loggedIn ? (
+    <Navigate to="/" replace />
+  ) : (
+    <main className="registr">
       <AuthScreen
         title="Добро пожаловать!"
         name="registr"
         onSubmit={handleSubmit}
         isFormValid={isFormValid}
-        buttonText="Зарегистрироваться"
+        buttonText={onLoading ? "Регистрация..." : "Зарегистрироваться"}
       >
         <label className="form__input-wrapper">
           Имя
           <input
             className={`form__input ${
-              errors.name ? "form__input_style_error" : ""
+              errors.name && "form__input_style_error"
             }`}
             type="text"
             name="name"
@@ -30,6 +37,8 @@ function Register() {
             required
             minLength="2"
             maxLength="30"
+            pattern={USER_NAME_REG_EXP}
+            disabled={onLoading ? true : false}
             id="name-input"
             onChange={onChange}
             value={values.name || ""}
@@ -48,10 +57,11 @@ function Register() {
             className={`form__input ${
               errors.email ? "form__input_style_error" : ""
             }`}
-            type="email"
+            type="text"
             name="email"
             form="registr"
             required
+            disabled={onLoading ? true : false}
             id="email-input"
             onChange={onChange}
             value={values.email || ""}
@@ -76,6 +86,7 @@ function Register() {
             required
             minLength="6"
             maxLength="30"
+            disabled={onLoading ? true : false}
             id="password-input"
             onChange={onChange}
             value={values.password || ""}

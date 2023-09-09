@@ -1,17 +1,21 @@
+// IMPORT PACKAGES
 import { useLocation } from "react-router-dom";
 import "./MoviesCard.css";
+import { convertDuration } from "../../utils/utils";
+import { MOVIES_API_URL } from "../../utils/constants";
 
-function MoviesCard({ card, isLiked, onCardLike }) {
+function MoviesCard({ card, isSaved, onCardSave, onCardDelete }) {
+  // HOOKS
   const location = useLocation();
 
-  function handleConvertDuration(duration) {
-    const minutes = duration % 60;
-    const hours = (duration - minutes) / 60;
-    if (hours < 1) {
-      return `${minutes}м`;
-    } else {
-      return `${hours}ч ${minutes}м`;
-    }
+  // HANDLER SAVE CLICK
+  function handleSaveClick() {
+    onCardSave(card);
+  }
+
+  // HANDLER DELETE CLICK
+  function handleDeleteClick() {
+    onCardDelete(card);
   }
 
   return (
@@ -19,23 +23,27 @@ function MoviesCard({ card, isLiked, onCardLike }) {
       <div className="movies-card__caption">
         <p className="movies-card__name">{card.nameRU}</p>
         <p className="movies-card__duration">
-          {handleConvertDuration(card.duration)}
+          {convertDuration(card.duration)}
         </p>
       </div>
       <img
         className="movies-card__img"
-        src={card.image}
+        src={
+          location.pathname === "/movies"
+            ? `${MOVIES_API_URL}${card.image.url}`
+            : `${card.image}`
+        }
         alt={"Кадр из фильма"}
       />
       {location.pathname === "/movies" ? (
         <button
           className={`movies-card__btn-action movies-card__btn-action_save hover-button ${
-            isLiked
+            isSaved
               ? "movies-card__btn-action_saved"
               : "movies-card__btn-action_save"
           }`}
           type="button"
-          onClick={onCardLike}
+          onClick={isSaved ? handleDeleteClick : handleSaveClick}
         />
       ) : (
         <button

@@ -1,14 +1,16 @@
 import "./Main.css";
+
+// IMPORT COMPONENTS
 import Promo from "../Promo/Promo";
 import AboutProject from "../AboutProject/AboutProject";
 import Techs from "../Techs/Techs";
 import AboutMe from "../AboutMe/AboutMe";
 
-
-function Main({ onAnchorClick, aboutRef }) {
+// MAIN COMPONENT
+function Main({ aboutRef }) {
   return (
     <main className="main">
-      <Promo onAnchorClick={onAnchorClick} aboutRef={aboutRef} />
+      <Promo aboutRef={aboutRef} />
       <AboutProject aboutRef={aboutRef} />
       <Techs />
       <AboutMe />

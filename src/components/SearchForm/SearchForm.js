@@ -1,16 +1,49 @@
 import "./SearchForm.css";
-
+import { useState, useEffect } from "react";
+import { useLocation } from "react-router-dom";
 import FilterCheckbox from "../FilterCheckbox/FilterCheckbox";
 
-function SearchForm({ onFilterChange, isFilterOn }) {
+function SearchForm({ onSearch, onFilterChange, isFilterOn, isSearching }) {
+  const [searchQuery, setSearchQuery] = useState("");
+  const [queryError, setQueryError] = useState("");
+  const location = useLocation();
+
+  // SUBSTITUTING A SEARCH QUERY FROM THE LOCAL STORAGE
+  useEffect(() => {
+    if (
+      location.pathname === "/movies" &&
+      localStorage.getItem("moviesSearchQuery")
+    ) {
+      const savedSearchQuery = localStorage.getItem("moviesSearchQuery");
+      setSearchQuery(savedSearchQuery);
+    } else if (
+      location.pathname === "/saved-movies" &&
+      localStorage.getItem("savedMoviesSearchQuery")
+    ) {
+      const savedSearchQuery = localStorage.getItem("savedMoviesSearchQuery");
+      setSearchQuery(savedSearchQuery);
+    }
+  }, [location.pathname]);
+
+  // RESET AN EMPTY REQUEST ERROR
+  useEffect(() => {
+    setQueryError("");
+  }, [searchQuery]);
+
+  // HANDLER SUBMIT
   function handleSubmit(e) {
     e.preventDefault();
+    if (location.pathname === "/movies") {
+      searchQuery
+        ? onSearch(searchQuery)
+        : setQueryError("Нужно ввести ключевое слово");
+    } else {
+      onSearch(searchQuery);
+    }
   }
 
   return (
-    <section
-      className="search-form"
-    >
+    <section className="search-form">
       <form
         className="search-form__form"
         id="search-and-filter"
@@ -26,8 +59,10 @@ function SearchForm({ onFilterChange, isFilterOn }) {
           placeholder="Фильм"
           type="search"
           autoComplete="off"
-          autoCorrect="off"
           autoCapitalize="off"
+          disabled={isSearching ? true : false}
+          onChange={(e) => setSearchQuery(e.target.value)}
+          value={searchQuery || ""}
         />
 
         <button
@@ -37,12 +72,13 @@ function SearchForm({ onFilterChange, isFilterOn }) {
         >
           Поиск
         </button>
-        
       </form>
+      <span className="search-form__error">{queryError}</span>
       <FilterCheckbox
-          onFilterChange={onFilterChange}
-          isFilterOn={isFilterOn}
-        />
+        onFilterChange={onFilterChange}
+        isFilterOn={isFilterOn}
+        isSearching={isSearching}
+      />
     </section>
   );
 }
