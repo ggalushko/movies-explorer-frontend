@@ -1,10 +1,10 @@
 .account-link {
-  width: 100px;
-  height: 30px;
   background-repeat: no-repeat;
   background-image: url("../../images/profile-icon.svg");
   background-position: center;
   background-size: contain;
+  width: 100px;
+  height: 30px;
   font-family: var(--main-font);
   color: var(--white);
   transition: var(--opacity);

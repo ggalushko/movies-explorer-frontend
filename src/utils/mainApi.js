@@ -1,9 +1,9 @@
-import { makeRequest } from "./utils";
+import { makeApiRequest } from "./utils";
 
 const baseURL = 'https://api.movies666.nomoredomainsicu.ru'
 
 export function register({ password, email, name }) {
-  return makeRequest(baseURL, "/signup", "POST", true, {
+  return makeApiRequest(baseURL, "/signup", "POST", true, {
     password,
     email,
     name,
@@ -12,29 +12,29 @@ export function register({ password, email, name }) {
 
 
 export function authorize({ password, email }) {
-  return makeRequest(baseURL, "/signin", "POST", true, {
+  return makeApiRequest(baseURL, "/signin", "POST", true, {
     password,
     email,
   });
 }
 
 export function logout() {
-  return makeRequest(baseURL, "/signout", "POST", true);
+  return makeApiRequest(baseURL, "/signout", "POST", true);
 }
 
 export function getUserInfo() {
-  return makeRequest(baseURL, "/users/me", "GET", true);
+  return makeApiRequest(baseURL, "/users/me", "GET", true);
 }
 
 export function updateUserInfo({ email, name }) {
-  return makeRequest(baseURL, "/users/me", "PATCH", true, {
+  return makeApiRequest(baseURL, "/users/me", "PATCH", true, {
     email,
     name,
   });
 }
 
-export function getCardsByOwner() {
-  return makeRequest(baseURL, "/movies", "GET", true);
+export function getMyMovies() {
+  return makeApiRequest(baseURL, "/movies", "GET", true);
 }
 
 export function createMovieCard({
@@ -50,7 +50,7 @@ export function createMovieCard({
   nameRU,
   nameEN,
 }) {
-  return makeRequest(baseURL, "/movies", "POST", true, {
+  return makeApiRequest(baseURL, "/movies", "POST", true, {
     country,
     director,
     duration,
@@ -66,5 +66,5 @@ export function createMovieCard({
 }
 
 export function deleteCard(movieId) {
-  return makeRequest(baseURL, `/movies/${movieId}`, "DELETE", true);
+  return makeApiRequest(baseURL, `/movies/${movieId}`, "DELETE", true);
 }

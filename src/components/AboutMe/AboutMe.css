@@ -48,10 +48,10 @@
   font-size: 14px;
   line-height: 1.57;
   color: var(--white);
-  margin-top: 26px;
   margin-bottom: 0;
   grid-area: text;
   font-family: var(--main-font);
+  margin-top: 26px;
 }
 
 .about-me__link {
@@ -71,9 +71,9 @@
   width: 270px;
   grid-area: img;
   object-fit: contain;
-  border-radius: 10px;
   font-family: var(--main-font);
   font-size: 13px;
+  border-radius: 10px;
   font-weight: 400;
   line-height: 1.23;
   color: var(--white);
@@ -94,15 +94,15 @@
   }
 
   .about-me__profession {
-    margin-top: 16px;
     font-size: 12px;
     line-height: 1.5;
+    margin-top: 16px;
   }
 
   .about-me__text {
-    margin-top: 20px;
     font-size: 12px;
     line-height: 1.5;
+    margin-top: 20px;
   }
 
   .about-me__img {
@@ -112,8 +112,8 @@
 
 @media screen and (max-width: 748px) {
   .about-me__bio {
-    grid-template-columns: 1fr;
     grid-template-rows: 352px repeat(4, min-content);
+    grid-template-columns: 1fr;
     grid-template-areas:
       "img"
       "name"
@@ -131,12 +131,12 @@
   }
 
   .about-me__img {
-    width: 292px;
     justify-self: center;
+    width: 292px;
   }
 }
 
-@media screen and (max-width: 620px) {
+@media screen and (max-width: 621px) {
   .about-me {
     padding: 70px 14px 51px;
   }
@@ -151,13 +151,13 @@
   }
 
   .about-me__profession {
-    margin-top: 20px;
     font-size: 11px;
+    margin-top: 20px;
     line-height: 1.45;
   }
 
   .about-me__text {
-    font-size: 11px;
     line-height: 1.45;
+    font-size: 11px;
   }
 }

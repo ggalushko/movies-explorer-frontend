@@ -1,4 +1,4 @@
-export function makeRequest(url, endpoint, method, credentials, body) {
+export function makeApiRequest(url, endpoint, method, credentials, body) {
   const headers = {
     "Content-Type": "application/json",
   };
