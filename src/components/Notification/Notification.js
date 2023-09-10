@@ -81,14 +81,6 @@ function Notification({ dispatch, noteId, type, title, message }) {
         </button>
       </div>
       <p className="notification__text">{message}</p>
-      <div
-        className={`notification__timer ${
-          type === "SUCCESS"
-            ? "notification__timer_type_success"
-            : "notification__timer_type_error"
-        }`}
-        style={{ width: `${width}%` }}
-      ></div>
     </div>
   );
 }
