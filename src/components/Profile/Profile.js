@@ -1,7 +1,6 @@
 import { useEffect, useState, useContext } from "react";
 import useFormWithValidation from "../../hooks/useFormWithValidation";
 import { CurrentUserContext } from "../../contexts/CurrentUserContext";
-import { USER_NAME_REG_EXP } from "../../utils/constants";
 import "./Profile.css";
 
 import AuthTitle from "../AuthTitle/AuthTitle";
@@ -14,24 +13,20 @@ function Profile({ onUpdateUser, onLogout, onLoading }) {
   const { values, errors, isFormValid, onChange, resetValidation } =
     useFormWithValidation();
 
-  // DETERMINING WHETHER THE ENTERED DATA IS THE CURRENT USER DATA
   useEffect(() => {
     currentUser.name !== values.name || currentUser.email !== values.email
       ? setUserDifference(false)
       : setUserDifference(true);
   }, [currentUser, values]);
 
-  // SET USER DATA TO INPUTS FROM PROFILE
   useEffect(() => {
     resetValidation(false, currentUser);
   }, [resetValidation, currentUser]);
 
-  // HANDLER EDIT CLICK
   function handleEditClick() {
     setEditingStatus(!isEditingBegun);
   }
 
-  // HANDLER SUBMIT
   function handleSubmit(e) {
     e.preventDefault();
     onUpdateUser(values);
@@ -64,7 +59,7 @@ function Profile({ onUpdateUser, onLogout, onLoading }) {
               required
               minLength="2"
               maxLength="30"
-              pattern={USER_NAME_REG_EXP}
+              pattern={"^[A-Za-zА-Яа-яЁё\\-\\s]+$"}
               id="name-input"
               disabled={isEditingBegun && !onLoading ? false : true}
               onChange={onChange}

@@ -1,18 +1,10 @@
-// IMPORT PACKAGES
 import { useReducer } from "react";
-
-// IMPORT STYLES
 import "./NotificationsProvider.css";
-
-// IMPORT COMPONENTS
 import Notification from "../Notification/Notification";
 
-// IMPORT CONTEXT
 import { NotificationContext } from "../../contexts/NotificationContext";
 
-// NOTIFICATIONS PROVIDER COMPONENT
 function NotificationsProvider({ ...props }) {
-  // HOOKS
   const [state, dispatch] = useReducer((state, action) => {
     switch (action.type) {
       case "ADD_NOTIFICATION":

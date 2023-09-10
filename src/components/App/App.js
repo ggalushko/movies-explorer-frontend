@@ -20,12 +20,12 @@ import { MOVIES_API_URL } from "../../utils/constants";
 
 
 function App() {
-  const [currentUser, setCurrentUser] = useState({});
-  const [loggedIn, setLoggedIn] = useState(false);
   const [savedCards, setSavedCards] = useState([]);
   const [isSideMenuOpen, setSideMenuStatus] = useState(false);
-  const [isLoading, setLoading] = useState(false);
+  const [currentUser, setCurrentUser] = useState({});
+  const [loggedIn, setLoggedIn] = useState(false);
   const [isPreloaderActive, setPreloaderClass] = useState(true);
+  const [isLoading, setLoading] = useState(false);
   const aboutOnClickRef = useRef(null);
   const navigate = useNavigate();
   const dispatch = useNotification();
@@ -109,20 +109,7 @@ function App() {
     }
   }
 
-  const handleUserLoginCheck = useCallback(async () => {
-    try {
-      const userData = await mainApi.getUserInfo();
-      if (userData) {
-        setLoggedIn(true);
-        setCurrentUser(userData);
-      }
-    } catch (err) {
-      console.error(err);
-    } finally {
-      setPreloaderClass(false);
-    }
-  }, []);
-
+  
   async function handleGetAllMovies() {
     setLoading(true);
     try {
@@ -153,7 +140,6 @@ function App() {
     }
   }, []);
 
-
   async function handleSaveMovie(movie) {
     try {
       const movieData = await mainApi.createMovieCard({
@@ -177,6 +163,21 @@ function App() {
     }
   }
 
+  const handleUserLoginCheck = useCallback(async () => {
+    try {
+      const userData = await mainApi.getUserInfo();
+      if (userData) {
+        setLoggedIn(true);
+        setCurrentUser(userData);
+      }
+    } catch (err) {
+      console.error(err);
+    } finally {
+      setPreloaderClass(false);
+    }
+  }, []);
+
+
   async function handleDeleteMovie(movie) {
     const savedMovie = savedCards.find(
       (card) => card.movieId === movie.id || card.movieId === movie.movieId
@@ -198,24 +199,20 @@ function App() {
     }
   }
 
-  // CHECK USER LOGGED IN
   useEffect(() => {
     handleUserLoginCheck();
   }, [loggedIn, handleUserLoginCheck]);
 
-  // SET USER SAVED MOVIES CARDS
   useEffect(() => {
     if (loggedIn) {
       handleGetUserMoviesCards();
     }
   }, [loggedIn, handleGetUserMoviesCards]);
 
-  // HANDLER OPEN SIDE MENU
   function handleOpenSideMenu() {
     setSideMenuStatus(!isSideMenuOpen);
   }
 
-  // HANDLER CLOSE SIDE MENU
   function handleCloseSideMenu() {
     setSideMenuStatus(false);
   }

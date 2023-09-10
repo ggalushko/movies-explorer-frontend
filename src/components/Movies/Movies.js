@@ -1,33 +1,21 @@
-// IMPORT PACKAGES
 import { useCallback, useState, useEffect } from "react";
 import useResizeScreen from "../../hooks/useResizeScreen";
-
-// IMPORT STYLES
 import "./Movies.css";
-
-// IMPORT COMPONENTS
+import { handleMovieFiltering, handleMovieSearch } from "../../utils/utils";
+import { CARDS_PARAMS_RENDER } from "../../utils/config";
 import SearchForm from "../SearchForm/SearchForm";
 import MoviesCardList from "../MoviesCardList/MoviesCardList";
 
-// IMPORT UTILS
-import { handleMovieFiltering, handleMovieSearch } from "../../utils/utils";
-
-// IMPORT CONFIGS
-import { CARDS_PARAMS_RENDER } from "../../utils/config";
-
-//MOVIES COMPONENT
 function Movies({ savedCards, onSearch, onCardSave, onCardDelete, isLoading }) {
-  // HOOKS
   const [initialCards, setInitialCards] = useState([]);
   const [cardsForRender, setCardsForRender] = useState([]);
   const [foundCards, setFoundCards] = useState([]);
   const [isFilterOn, setFilter] = useState(false);
-  const [isCardsNotFound, setCardsNotFound] = useState(false);
   const [cardsRenderParams, setCardsRenderParams] = useState({});
   const [isSearching, setIsSearching] = useState(false);
+  const [isCardsNotFound, setCardsNotFound] = useState(false);
   const screenWidth = useResizeScreen();
 
-  // HANDLER SEARCH AND FILTERING MOVIES
   const handleSearchAndFiltering = useCallback(
     (cards, searchQuery) => {
       const found = handleMovieSearch(cards, searchQuery, false);
@@ -49,7 +37,6 @@ function Movies({ savedCards, onSearch, onCardSave, onCardDelete, isLoading }) {
     [isFilterOn]
   );
 
-  // HANDLER ON SEARCH SUBMIT
   const handleOnSearchSubmit = useCallback(
     async (searchQuery) => {
       setCardsNotFound(false);
@@ -67,7 +54,6 @@ function Movies({ savedCards, onSearch, onCardSave, onCardDelete, isLoading }) {
     [handleSearchAndFiltering, initialCards, onSearch]
   );
 
-  // HANDLER FILTER MOVIES
   const handleOnFilterClick = useCallback(
     (isChecked) => {
       setFilter(isChecked);
@@ -81,7 +67,6 @@ function Movies({ savedCards, onSearch, onCardSave, onCardDelete, isLoading }) {
     [foundCards]
   );
 
-  // SET THE CARD RENDER PARAMETERS DEPENDING ON THE SCREEN WIDTH
   useEffect(() => {
     if (screenWidth >= CARDS_PARAMS_RENDER.base.width) {
       setCardsRenderParams(CARDS_PARAMS_RENDER.base.cards);
@@ -100,7 +85,6 @@ function Movies({ savedCards, onSearch, onCardSave, onCardDelete, isLoading }) {
     }
   }, [screenWidth]);
 
-  // DEPENDENCIES ON THE RENDERING OF MOVIE CARDS
   useEffect(() => {
     if (
       localStorage.getItem("foundMovies") &&

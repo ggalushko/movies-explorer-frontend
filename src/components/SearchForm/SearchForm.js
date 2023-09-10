@@ -8,7 +8,6 @@ function SearchForm({ onSearch, onFilterChange, isFilterOn, isSearching }) {
   const [queryError, setQueryError] = useState("");
   const location = useLocation();
 
-  // SUBSTITUTING A SEARCH QUERY FROM THE LOCAL STORAGE
   useEffect(() => {
     if (
       location.pathname === "/movies" &&
@@ -25,12 +24,10 @@ function SearchForm({ onSearch, onFilterChange, isFilterOn, isSearching }) {
     }
   }, [location.pathname]);
 
-  // RESET AN EMPTY REQUEST ERROR
   useEffect(() => {
     setQueryError("");
   }, [searchQuery]);
 
-  // HANDLER SUBMIT
   function handleSubmit(e) {
     e.preventDefault();
     if (location.pathname === "/movies") {

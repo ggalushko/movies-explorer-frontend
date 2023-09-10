@@ -1,15 +1,11 @@
-// IMPORT PACKAGES
 import { useCallback, useState } from "react";
 import isEmail from "validator/es/lib/isEmail";
 
-// USE FORM WITH VALIDATION HOOK
 function useFormWithValidation() {
-  // HOOKS
+  const [isFormValid, setFormValid] = useState(false);
   const [values, setValues] = useState({});
   const [errors, setErrors] = useState({});
-  const [isFormValid, setFormValid] = useState(false);
 
-  // HANDLER INPUTS CHANGE
   function onChange(e) {
     const target = e.target;
     const { value, name } = target;
@@ -29,7 +25,6 @@ function useFormWithValidation() {
     setFormValid(target.closest("form").checkValidity());
   }
 
-  // HANDLER RESET VALIDATION ERRORS
   const resetValidation = useCallback(
     (isFormValid = false, values = {}, errors = {}) => {
       setFormValid(isFormValid);

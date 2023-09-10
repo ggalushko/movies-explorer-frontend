@@ -1,17 +1,12 @@
-// IMPORT PACKAGES
 import { useCallback, useEffect, useState } from "react";
-
-// IMPORT STYLES
 import "./Notification.css";
 
-// NOTIFICATIONS COMPONENT
 function Notification({ dispatch, noteId, type, title, message }) {
-  // HOOKS
   const [exit, setExit] = useState(false);
   const [width, setWidth] = useState(0);
   const [intervalId, setIntervalId] = useState(null);
 
-  // HANDLER START TIMER
+
   function handleStartTimer() {
     const id = setInterval(() => {
       setWidth((prevState) => {
@@ -25,12 +20,10 @@ function Notification({ dispatch, noteId, type, title, message }) {
     setIntervalId(id);
   }
 
-  // HANDLER PAUSE TIMER
   const handlePauseTimer = useCallback(() => {
     clearInterval(intervalId);
   }, [intervalId]);
 
-  // HANDLER CLOSE NOTIFICATIONS
   const handleCloseNotification = useCallback(() => {
     handlePauseTimer();
     setExit(true);
@@ -42,20 +35,12 @@ function Notification({ dispatch, noteId, type, title, message }) {
     }, 400);
   }, [handlePauseTimer, dispatch, noteId]);
 
-  // CLOSING THE NOTIFICATION WHEN THE TIMER EXPIRES
   useEffect(() => {
     if (width === 100) {
       handleCloseNotification();
     }
   }, [width, handleCloseNotification]);
 
-  // TIMER START
-  /* 
-  Due to <React.StrictMode> in development mode,useEffect is started twice, which makes
-  it impossible to stop the timer by hovering the mouse cursor. You can get acquainted
-  with the actual behavior of the component by deleting <React.StrictMode>, or using
-  the build version
-  */
   useEffect(() => {
     handleStartTimer();
   }, []);

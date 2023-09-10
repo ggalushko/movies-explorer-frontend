@@ -1,14 +1,10 @@
 import { Navigate } from "react-router-dom";
 import useFormWithValidation from "../../hooks/useFormWithValidation";
-import { USER_NAME_REG_EXP } from "../../utils/constants";
 import "./Register.css";
 import AuthScreen from "../AuthScreen/AuthScreen";
 
 function Register({ onRegistr, onLoading, loggedIn }) {
-  // HOOKS
   const { values, errors, isFormValid, onChange } = useFormWithValidation();
-
-  // HANDLER SUBMIT
   function handleSubmit(e) {
     e.preventDefault();
     onRegistr(values);
@@ -37,7 +33,7 @@ function Register({ onRegistr, onLoading, loggedIn }) {
             required
             minLength="2"
             maxLength="30"
-            pattern={USER_NAME_REG_EXP}
+            pattern={"^[A-Za-zА-Яа-яЁё\\-\\s]+$"}
             disabled={onLoading ? true : false}
             id="name-input"
             onChange={onChange}

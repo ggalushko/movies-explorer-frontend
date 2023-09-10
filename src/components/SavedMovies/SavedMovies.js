@@ -5,14 +5,12 @@ import { useState, useCallback, useEffect } from "react";
 import { handleMovieFiltering, handleMovieSearch } from "../../utils/utils";
 
 function SavedMovies({ savedCards, onCardDelete }) {
-  // HOOKS
   const [cardsForRender, setCardsForRender] = useState([]);
   const [filteredCards, setFilteredCards] = useState([]);
   const [isFilterOn, setFilter] = useState(false);
   const [isCardsNotFound, setCardsNotFound] = useState(false);
   const [isSearching, setIsSearching] = useState(false);
 
-  // HANDLER ON SEARCH SUBMIT
   const handleOnSearchSubmit = useCallback(
     (searchQuery) => {
       setCardsNotFound(false);
@@ -41,7 +39,6 @@ function SavedMovies({ savedCards, onCardDelete }) {
     [savedCards, isFilterOn]
   );
 
-  // HANDLER FILTER SAVED MOVIES
   const handleOnFilterClick = useCallback(
     (isChecked) => {
       setFilter(isChecked);
@@ -55,7 +52,6 @@ function SavedMovies({ savedCards, onCardDelete }) {
     [filteredCards]
   );
 
-  // DEPENDENCIES ON THE RENDERING OF SAVED CARDS
   useEffect(() => {
     setCardsNotFound(false);
     if (
