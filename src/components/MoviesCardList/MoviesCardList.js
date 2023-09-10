@@ -1,14 +1,8 @@
 import { useEffect, useState } from "react";
 import { useLocation } from "react-router-dom";
-
-// IMPORT STYLES
 import "./MoviesCardList.css";
-
-// IMPORT COMPONENTS
 import MoviesCard from "../MoviesCard/MoviesCard";
 import Preloader from "../Preloader/Preloader";
-
-// IMPORT UTILS
 import { handleSavedStatus } from "../../utils/utils";
 
 function MoviesCardList({
@@ -23,7 +17,6 @@ function MoviesCardList({
   const [cardsForRender, setCardsForRender] = useState([]);
   const location = useLocation();
 
-  // RENDER CARDS DEPENDING ON THE SCREEN WIDTH
   useEffect(() => {
     if (location.pathname === "/movies" && cards.length) {
       const result = cards.filter((card, index) => {
@@ -33,14 +26,13 @@ function MoviesCardList({
     }
   }, [location.pathname, cards, cardsRenderParams]);
 
-  // DEPENDENCIES ON THE RENDERING OF SAVED CARDS
   useEffect(() => {
     if (location.pathname === "/saved-movies") {
       setCardsForRender(cards);
     }
   }, [location.pathname, cards]);
 
-  // HANDLER CLICK ON BUTTON MORE
+
   function handleClickOnButtonMore() {
     const start = cardsForRender.length;
     const end = start + cardsRenderParams.more;
@@ -55,10 +47,10 @@ function MoviesCardList({
     <section className="movies-card-list">
       {!localStorage.getItem("searchQuery") && cards.length === 0 && null}
       {isLoading && cards.length === 0 && <Preloader />}
-
-      {cards.length === 0 && !isCardsNotFound ? (
-        <p className="movies-card-list__not-found">Ничего не найдено</p>
-      ) : (
+      {isCardsNotFound && (
+        <p className="movies-card-list__info">Ничего не найдено</p>
+      )}
+      {cards.length !== 0 && !isCardsNotFound && (
         <>
           <ul
             className={`movies-card-list__list ${

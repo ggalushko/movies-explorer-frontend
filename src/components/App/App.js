@@ -1,12 +1,7 @@
-// IMPORT PACKAGES
 import { useCallback, useEffect, useRef, useState } from "react";
 import { Route, Routes, useNavigate } from "react-router-dom";
 import useNotification from "../../hooks/useNotification";
-
-// IMPORT STYLES
 import "./App.css";
-
-// IMPORT COMPONENTS
 import AppLayout from "../AppLayout/AppLayout";
 import Main from "../Main/Main";
 import Movies from "../Movies/Movies";
@@ -18,20 +13,13 @@ import Registr from "../Register/Register";
 import NotFound from "../NotFound/NotFound";
 import Preloader from "../Preloader/Preloader";
 import ProtectedRoute from "../ProtectedRoute/ProtectedRoute";
-
-// IMPORT CONTEXT
 import { CurrentUserContext } from "../../contexts/CurrentUserContext";
-
-// IMPORT API'S
 import * as mainApi from "../../utils/mainApi";
 import * as moviesApi from "../../utils/moviesApi";
-
-// IMPORT VARIABLES
 import { MOVIES_API_URL } from "../../utils/constants";
 
-// APP COMPONENT
+
 function App() {
-  // HOOKS
   const [currentUser, setCurrentUser] = useState({});
   const [loggedIn, setLoggedIn] = useState(false);
   const [savedCards, setSavedCards] = useState([]);
@@ -42,7 +30,6 @@ function App() {
   const navigate = useNavigate();
   const dispatch = useNotification();
 
-  // HANDLER USER UPDATE
   async function handleUserUpdate({ email, name }) {
     setLoading(true);
     try {
@@ -67,7 +54,6 @@ function App() {
     }
   }
 
-  // HANDLER USER REGISTRATION
   async function handleUserRegistration({ password, email, name }) {
     setLoading(true);
     try {
@@ -88,7 +74,6 @@ function App() {
     }
   }
 
-  // HANDLER USER AUTHORIZATION
   async function handleUserAuthorization({ email, password }) {
     setLoading(true);
     try {
@@ -109,7 +94,6 @@ function App() {
     }
   }
 
-  // HANDLER USER LOGOUT
   async function handleUserLogOut() {
     try {
       const data = await mainApi.logout();
@@ -125,7 +109,6 @@ function App() {
     }
   }
 
-  // HANDLER USER LOGIN CHECK
   const handleUserLoginCheck = useCallback(async () => {
     try {
       const userData = await mainApi.getUserInfo();
@@ -140,7 +123,6 @@ function App() {
     }
   }, []);
 
-  // HANDLER FOR GET ALL MOVIES
   async function handleGetAllMovies() {
     setLoading(true);
     try {
@@ -152,9 +134,7 @@ function App() {
       dispatch({
         type: "ERROR",
         title: "Ошибка",
-        message: `Во время запроса произошла ошибка. Возможно, 
-        проблема с соединением или сервер недоступен. Подождите 
-        немного и попробуйте ещё раз`,
+        message: `Во время запроса произошла ошибка`,
       });
       console.error(err);
     } finally {
@@ -162,7 +142,6 @@ function App() {
     }
   }
 
-  // HANDLER GET USER MOVIES CARDS
   const handleGetUserMoviesCards = useCallback(async () => {
     try {
       const moviesData = await mainApi.getCardsByOwner();
@@ -174,7 +153,7 @@ function App() {
     }
   }, []);
 
-  // HANDLER SAVE MOVIE
+
   async function handleSaveMovie(movie) {
     try {
       const movieData = await mainApi.createMovieCard({
@@ -198,7 +177,6 @@ function App() {
     }
   }
 
-  // HANDLER DELETE MOVIES
   async function handleDeleteMovie(movie) {
     const savedMovie = savedCards.find(
       (card) => card.movieId === movie.id || card.movieId === movie.movieId

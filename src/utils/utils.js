@@ -1,7 +1,6 @@
 export function makeRequest(url, endpoint, method, credentials, body) {
   const headers = {
     "Content-Type": "application/json",
-    'authorization': localStorage.getItem("jwt"),
   };
   const config = { method, headers };
   if (credentials) {

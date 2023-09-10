@@ -1,4 +1,3 @@
-// CARDS PARAMS RENDER
 export const CARDS_PARAMS_RENDER = {
   base: {
     width: 1280,

@@ -1,19 +1,15 @@
-// IMPORT PACKAGES
 import { useLocation } from "react-router-dom";
 import "./MoviesCard.css";
 import { convertDuration } from "../../utils/utils";
 import { MOVIES_API_URL } from "../../utils/constants";
 
 function MoviesCard({ card, isSaved, onCardSave, onCardDelete }) {
-  // HOOKS
   const location = useLocation();
 
-  // HANDLER SAVE CLICK
   function handleSaveClick() {
     onCardSave(card);
   }
 
-  // HANDLER DELETE CLICK
   function handleDeleteClick() {
     onCardDelete(card);
   }
@@ -48,7 +44,7 @@ function MoviesCard({ card, isSaved, onCardSave, onCardDelete }) {
       ) : (
         <button
           className="movies-card__btn-action movies-card__btn-action_delete"
-          type="button"
+          type="button" onClick={handleDeleteClick}
         />
       )}
     </li>

@@ -65,6 +65,6 @@ export function createMovieCard({
   });
 }
 
-export function deleteCard(id) {
-  return makeRequest(baseURL, `/movies/${id}`, "DELETE", true);
+export function deleteCard(movieId) {
+  return makeRequest(baseURL, `/movies/${movieId}`, "DELETE", true);
 }
