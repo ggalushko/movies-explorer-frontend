@@ -1,6 +1,6 @@
-import { makeApiRequest } from "./utils";
+import { makeRequest } from "./utils";
 import { MOVIES_API_URL } from "./constants";
 
-export function getMovies() {
-  return makeApiRequest(MOVIES_API_URL, "/beatfilm-movies", "GET");
+export function getCards() {
+  return makeRequest(MOVIES_API_URL, "/beatfilm-movies", "GET");
 }

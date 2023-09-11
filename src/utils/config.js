@@ -1,30 +1,30 @@
 export const CARDS_PARAMS_RENDER = {
-  mobile: {
-    cards: {
-      total: 5,
-      more: 2,
-    },
-    width: 320,
-  },
-  tablet: {
-    cards: {
-      total: 8,
-      more: 2,
-    },
-    width: 768,
-  },
-  desktop: {
-    cards: {
-      total: 12,
-      more: 3,
-    },
-    width: 991,
-  },
   base: {
+    width: 1280,
     cards: {
       total: 16,
       more: 4,
     },
-    width: 1280,
+  },
+  desktop: {
+    width: 991,
+    cards: {
+      total: 12,
+      more: 3,
+    },
+  },
+  tablet: {
+    width: 768,
+    cards: {
+      total: 8,
+      more: 2,
+    },
+  },
+  mobile: {
+    width: 320,
+    cards: {
+      total: 5,
+      more: 2,
+    },
   },
 };

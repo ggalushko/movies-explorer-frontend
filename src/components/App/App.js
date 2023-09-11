@@ -9,7 +9,7 @@ import SavedMovies from "../SavedMovies/SavedMovies";
 import HamburgerMenu from "../HamburgerMenu/HamburgerMenu";
 import Profile from "../Profile/Profile";
 import Login from "../Login/Login";
-import Register from "../Register/Register";
+import Registr from "../Register/Register";
 import NotFound from "../NotFound/NotFound";
 import Preloader from "../Preloader/Preloader";
 import ProtectedRoute from "../ProtectedRoute/ProtectedRoute";
@@ -18,8 +18,9 @@ import * as mainApi from "../../utils/mainApi";
 import * as moviesApi from "../../utils/moviesApi";
 import { MOVIES_API_URL } from "../../utils/constants";
 
+
 function App() {
-  const [savedMovies, setsavedMovies] = useState([]);
+  const [savedCards, setSavedCards] = useState([]);
   const [isSideMenuOpen, setSideMenuStatus] = useState(false);
   const [currentUser, setCurrentUser] = useState({});
   const [loggedIn, setLoggedIn] = useState(false);
@@ -29,7 +30,7 @@ function App() {
   const navigate = useNavigate();
   const dispatch = useNotification();
 
-  async function handleUpdateInfo({ email, name }) {
+  async function handleUserUpdate({ email, name }) {
     setLoading(true);
     try {
       const userData = await mainApi.updateUserInfo({ email, name });
@@ -38,7 +39,7 @@ function App() {
         dispatch({
           type: "SUCCESS",
           title: "Выполнено",
-          message: "Профиль обновлён",
+          message: "Профиль успешно обновлён",
         });
       }
     } catch (err) {
@@ -53,12 +54,12 @@ function App() {
     }
   }
 
-  async function handleSignUp({ password, email, name }) {
+  async function handleUserRegistration({ password, email, name }) {
     setLoading(true);
     try {
       const userData = await mainApi.register({ password, email, name });
       if (userData) {
-        handleSignIn({ email, password });
+        handleUserAuthorization({ email, password });
         navigate("/movies", { replace: true });
       }
     } catch (err) {
@@ -73,7 +74,7 @@ function App() {
     }
   }
 
-  async function handleSignIn({ email, password }) {
+  async function handleUserAuthorization({ email, password }) {
     setLoading(true);
     try {
       const userData = await mainApi.authorize({ email, password });
@@ -93,13 +94,13 @@ function App() {
     }
   }
 
-  async function handleLogOut() {
+  async function handleUserLogOut() {
     try {
       const data = await mainApi.logout();
       if (data) {
         setLoggedIn(false);
-        setsavedMovies([]);
         setCurrentUser({});
+        setSavedCards([]);
         localStorage.clear();
         navigate("/", { replace: true });
       }
@@ -108,10 +109,11 @@ function App() {
     }
   }
 
-  async function handleGetMovies() {
+  
+  async function handleGetAllMovies() {
     setLoading(true);
     try {
-      const moviesData = await moviesApi.getMovies();
+      const moviesData = await moviesApi.getCards();
       if (moviesData) {
         return moviesData;
       }
@@ -127,11 +129,11 @@ function App() {
     }
   }
 
-  const handleSavedMovies = useCallback(async () => {
+  const handleGetUserMoviesCards = useCallback(async () => {
     try {
-      const moviesData = await mainApi.getMyMovies();
+      const moviesData = await mainApi.getCardsByOwner();
       if (moviesData) {
-        setsavedMovies(moviesData);
+        setSavedCards(moviesData);
       }
     } catch (err) {
       console.error(err);
@@ -140,7 +142,7 @@ function App() {
 
   async function handleSaveMovie(movie) {
     try {
-      const newMovie = await mainApi.createMovieCard({
+      const movieData = await mainApi.createMovieCard({
         country: movie.country,
         director: movie.director,
         duration: movie.duration,
@@ -153,15 +155,15 @@ function App() {
         nameRU: movie.nameRU,
         nameEN: movie.nameEN,
       });
-      if (newMovie) {
-        setsavedMovies([newMovie, ...savedMovies]);
+      if (movieData) {
+        setSavedCards([movieData, ...savedCards]);
       }
     } catch (err) {
       console.error(err);
     }
   }
 
-  const handleCheckLogin = useCallback(async () => {
+  const handleUserLoginCheck = useCallback(async () => {
     try {
       const userData = await mainApi.getUserInfo();
       if (userData) {
@@ -175,15 +177,16 @@ function App() {
     }
   }, []);
 
+
   async function handleDeleteMovie(movie) {
-    const movieToDelete = savedMovies.find(
+    const savedMovie = savedCards.find(
       (card) => card.movieId === movie.id || card.movieId === movie.movieId
     );
     try {
-      const data = await mainApi.deleteCard(movieToDelete._id);
+      const data = await mainApi.deleteCard(savedMovie._id);
       if (data) {
-        setsavedMovies((state) =>
-          state.filter((card) => card._id !== movieToDelete._id)
+        setSavedCards((state) =>
+          state.filter((card) => card._id !== savedMovie._id)
         );
       }
     } catch (err) {
@@ -197,20 +200,20 @@ function App() {
   }
 
   useEffect(() => {
-    handleCheckLogin();
-  }, [loggedIn, handleCheckLogin]);
+    handleUserLoginCheck();
+  }, [loggedIn, handleUserLoginCheck]);
 
   useEffect(() => {
     if (loggedIn) {
-      handleSavedMovies();
+      handleGetUserMoviesCards();
     }
-  }, [loggedIn, handleSavedMovies]);
+  }, [loggedIn, handleGetUserMoviesCards]);
 
-  function handleOpenSlider() {
+  function handleOpenSideMenu() {
     setSideMenuStatus(!isSideMenuOpen);
   }
 
-  function handleCloseSlider() {
+  function handleCloseSideMenu() {
     setSideMenuStatus(false);
   }
 
@@ -225,8 +228,8 @@ function App() {
               path="/"
               element={
                 <AppLayout
+                  onHamburgerClick={handleOpenSideMenu}
                   loggedIn={loggedIn}
-                  onHamburgerClick={handleOpenSlider}
                 />
               }
             >
@@ -236,12 +239,12 @@ function App() {
                 element={
                   <ProtectedRoute
                     element={Movies}
-                    onSearch={handleGetMovies}
+                    savedCards={savedCards}
+                    onSearch={handleGetAllMovies}
                     onCardSave={handleSaveMovie}
                     onCardDelete={handleDeleteMovie}
-                    savedMovies={savedMovies}
-                    loggedIn={loggedIn}
                     isLoading={isLoading}
+                    loggedIn={loggedIn}
                   />
                 }
               />
@@ -250,9 +253,9 @@ function App() {
                 element={
                   <ProtectedRoute
                     element={SavedMovies}
+                    savedCards={savedCards}
                     onCardDelete={handleDeleteMovie}
                     loggedIn={loggedIn}
-                    savedMovies={savedMovies}
                   />
                 }
               />
@@ -261,10 +264,10 @@ function App() {
                 element={
                   <ProtectedRoute
                     element={Profile}
+                    onUpdateUser={handleUserUpdate}
+                    onLogout={handleUserLogOut}
                     onLoading={isLoading}
                     loggedIn={loggedIn}
-                    onUpdateUser={handleUpdateInfo}
-                    onLogout={handleLogOut}
                   />
                 }
               />
@@ -273,27 +276,27 @@ function App() {
               path="/signin"
               element={
                 <Login
+                  onLogin={handleUserAuthorization}
                   onLoading={isLoading}
                   loggedIn={loggedIn}
-                  onLogin={handleSignIn}
                 />
               }
             />
             <Route
               path="/signup"
               element={
-                <Register
+                <Registr
+                  onRegistr={handleUserRegistration}
                   onLoading={isLoading}
                   loggedIn={loggedIn}
-                  onRegister={handleSignUp}
                 />
               }
             />
             <Route path="/*" element={<NotFound />} />
           </Routes>
           <HamburgerMenu
-            onClose={handleCloseSlider}
             isSideMenuOpen={isSideMenuOpen}
+            onClose={handleCloseSideMenu}
           />
         </CurrentUserContext.Provider>
       )}
