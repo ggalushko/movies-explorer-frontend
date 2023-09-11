@@ -1,35 +1,50 @@
-import { useEffect, useState } from "react";
-import useValidation from "../../hooks/useValidation";
+import { useEffect, useState, useContext } from "react";
+import useFormWithValidation from "../../hooks/useFormWithValidation";
+import { CurrentUserContext } from "../../contexts/CurrentUserContext";
 import "./Profile.css";
 
 import AuthTitle from "../AuthTitle/AuthTitle";
 import Form from "../Form/Form";
 
-function Profile({ user }) {
+function Profile({ onUpdateUser, onLogout, onLoading }) {
+  const currentUser = useContext(CurrentUserContext);
+  const [isCurrentUser, setUserDifference] = useState(true);
   const [isEditingBegun, setEditingStatus] = useState(false);
   const { values, errors, isFormValid, onChange, resetValidation } =
-    useValidation();
+    useFormWithValidation();
+
+  useEffect(() => {
+    currentUser.name !== values.name || currentUser.email !== values.email
+      ? setUserDifference(false)
+      : setUserDifference(true);
+  }, [currentUser, values]);
+
+  useEffect(() => {
+    resetValidation(false, currentUser);
+  }, [resetValidation, currentUser]);
 
   function handleEditClick() {
     setEditingStatus(!isEditingBegun);
   }
+
   function handleSubmit(e) {
     e.preventDefault();
+    onUpdateUser(values);
   }
-
-  useEffect(() => {
-    resetValidation(true, user);
-  }, [resetValidation, user]);
 
   return (
     <main className="profile">
       <section className="profile__wrapper">
-        <AuthTitle title={`Привет, ${user.name}!`} place="edit-profile" />
+        <AuthTitle
+          title={`Привет, ${currentUser.name || ""}!`}
+          place="edit-profile"
+        />
         <Form
           name="edit-profile"
           onSubmit={handleSubmit}
           isFormValid={isFormValid}
-          buttonText="Сохранить"
+          isCurrentUser={isCurrentUser}
+          buttonText={onLoading ? "Сохранение..." : "Сохранить"}
           isEditingBegun={isEditingBegun}
         >
           <label className="form__input-wrapper form__input-wrapper_type_edit-profile">
@@ -44,8 +59,9 @@ function Profile({ user }) {
               required
               minLength="2"
               maxLength="30"
+              pattern={"^[A-Za-zА-Яа-яЁё\\-\\s]+$"}
               id="name-input"
-              disabled={isEditingBegun ? false : true}
+              disabled={isEditingBegun && !onLoading ? false : true}
               onChange={onChange}
               value={values.name || ""}
             />
@@ -56,12 +72,12 @@ function Profile({ user }) {
               className={`form__input form__input_type_edit-profile ${
                 errors.email ? "form__input_style_error" : ""
               }`}
-              type="email"
+              type="text"
               name="email"
               form="edit-profile"
               required
               id="email-input"
-              disabled={isEditingBegun ? false : true}
+              disabled={isEditingBegun && !onLoading ? false : true}
               onChange={onChange}
               value={values.email || ""}
             />
@@ -120,6 +136,7 @@ function Profile({ user }) {
           <button
             className="profile__btn-action profile__btn-action_type_exit hover-link"
             type="button"
+            onClick={onLogout}
           >
             Выйти из аккаунта
           </button>

@@ -2,12 +2,12 @@ import { Outlet, useLocation } from "react-router-dom";
 import Header from "../Header/Header";
 import Footer from "../Footer/Footer";
 
-function AppLayout({ onHamburgerClick }) {
+function AppLayout({ onHamburgerClick, loggedIn }) {
   const location = useLocation();
 
   return (
     <>
-      <Header onHamburgerClick={onHamburgerClick} />
+      <Header onHamburgerClick={onHamburgerClick} loggedIn={loggedIn} />
       <Outlet />
       {location.pathname !== "/profile" && <Footer />}
     </>

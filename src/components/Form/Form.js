@@ -1,14 +1,23 @@
 import "./Form.css";
-import ServerErrors from "../ServerErrors/ServerErrors";
 
 function Form({
   name,
   onSubmit,
   isFormValid,
+  isCurrentUser,
   buttonText,
   isEditingBegun,
   ...props
 }) {
+
+  function handleButtonDisable() {
+    if (name === "edit-profile") {
+      return isFormValid && !isCurrentUser ? false : true;
+    } else {
+      return isFormValid ? false : true;
+    }
+  }
+
   return (
     <form
       action="#"
@@ -19,16 +28,15 @@ function Form({
       onSubmit={onSubmit}
     >
       {props.children}
-      <ServerErrors isEditingBegun={isEditingBegun} place={name} />
       <button
         type="submit"
         form={`${name}`}
-        className={`form__btn-submit ${
+        className={`form__btn-submit form__btn-submit_type_${name} ${
           name === "edit-profile" && !isEditingBegun
             ? "form__btn-submit_hidden"
             : ""
         } hover-button`}
-        disabled={isFormValid ? false : true}
+        disabled={handleButtonDisable()}
       >
         {buttonText}
       </button>
