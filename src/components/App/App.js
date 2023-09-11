@@ -30,7 +30,7 @@ function App() {
   const navigate = useNavigate();
   const dispatch = useNotification();
 
-  async function handleUserUpdate({ email, name }) {
+  async function handleUpdateInfo({ email, name }) {
     setLoading(true);
     try {
       const userData = await mainApi.updateUserInfo({ email, name });
@@ -54,12 +54,12 @@ function App() {
     }
   }
 
-  async function handleUserRegistration({ password, email, name }) {
+  async function handleSignUp({ password, email, name }) {
     setLoading(true);
     try {
       const userData = await mainApi.register({ password, email, name });
       if (userData) {
-        handleUserAuthorization({ email, password });
+        handleLogIn({ email, password });
         navigate("/movies", { replace: true });
       }
     } catch (err) {
@@ -74,7 +74,7 @@ function App() {
     }
   }
 
-  async function handleUserAuthorization({ email, password }) {
+  async function handleLogIn({ email, password }) {
     setLoading(true);
     try {
       const userData = await mainApi.authorize({ email, password });
@@ -94,7 +94,7 @@ function App() {
     }
   }
 
-  async function handleUserLogOut() {
+  async function handleLogOut() {
     try {
       const data = await mainApi.logout();
       if (data) {
@@ -110,7 +110,7 @@ function App() {
   }
 
   
-  async function handleGetAllMovies() {
+  async function handleMovies() {
     setLoading(true);
     try {
       const moviesData = await moviesApi.getCards();
@@ -129,7 +129,7 @@ function App() {
     }
   }
 
-  const handleGetUserMoviesCards = useCallback(async () => {
+  const handleSavedMovies = useCallback(async () => {
     try {
       const moviesData = await mainApi.getCardsByOwner();
       if (moviesData) {
@@ -163,7 +163,7 @@ function App() {
     }
   }
 
-  const handleUserLoginCheck = useCallback(async () => {
+  const handleLoginCheck = useCallback(async () => {
     try {
       const userData = await mainApi.getUserInfo();
       if (userData) {
@@ -200,14 +200,14 @@ function App() {
   }
 
   useEffect(() => {
-    handleUserLoginCheck();
-  }, [loggedIn, handleUserLoginCheck]);
+    handleLoginCheck();
+  }, [loggedIn, handleLoginCheck]);
 
   useEffect(() => {
     if (loggedIn) {
-      handleGetUserMoviesCards();
+      handleSavedMovies();
     }
-  }, [loggedIn, handleGetUserMoviesCards]);
+  }, [loggedIn, handleSavedMovies]);
 
   function handleOpenSideMenu() {
     setSideMenuStatus(!isSideMenuOpen);
@@ -240,7 +240,7 @@ function App() {
                   <ProtectedRoute
                     element={Movies}
                     savedCards={savedCards}
-                    onSearch={handleGetAllMovies}
+                    onSearch={handleMovies}
                     onCardSave={handleSaveMovie}
                     onCardDelete={handleDeleteMovie}
                     isLoading={isLoading}
@@ -264,8 +264,8 @@ function App() {
                 element={
                   <ProtectedRoute
                     element={Profile}
-                    onUpdateUser={handleUserUpdate}
-                    onLogout={handleUserLogOut}
+                    onUpdateUser={handleUpdateInfo}
+                    onLogout={handleLogOut}
                     onLoading={isLoading}
                     loggedIn={loggedIn}
                   />
@@ -276,7 +276,7 @@ function App() {
               path="/signin"
               element={
                 <Login
-                  onLogin={handleUserAuthorization}
+                  onLogin={handleLogIn}
                   onLoading={isLoading}
                   loggedIn={loggedIn}
                 />
@@ -286,7 +286,7 @@ function App() {
               path="/signup"
               element={
                 <Registr
-                  onRegistr={handleUserRegistration}
+                  onRegistr={handleSignUp}
                   onLoading={isLoading}
                   loggedIn={loggedIn}
                 />
