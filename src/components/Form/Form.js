@@ -9,7 +9,7 @@ function Form({
   isEditingBegun,
   ...props
 }) {
-  // HANDLER BUTTON DISABLE
+
   function handleButtonDisable() {
     if (name === "edit-profile") {
       return isFormValid && !isCurrentUser ? false : true;

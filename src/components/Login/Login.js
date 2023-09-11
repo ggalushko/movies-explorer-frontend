@@ -4,10 +4,8 @@ import "./Login.css";
 import AuthScreen from "../AuthScreen/AuthScreen";
 
 function Login({ onLogin, onLoading, loggedIn }) {
-  // HOOKS
   const { values, errors, isFormValid, onChange } = useFormWithValidation();
 
-  // HANDLER SUBMIT
   function handleSubmit(e) {
     e.preventDefault();
     onLogin(values);

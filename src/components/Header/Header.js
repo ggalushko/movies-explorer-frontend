@@ -5,7 +5,6 @@ import Navigation from "../Navigation/Navigation";
 import AccountLink from "../AccountLink/AccountLink";
 
 function Header({ onHamburgerClick, loggedIn }) {
-  // HOOKS
   const location = useLocation();
 
   return (
